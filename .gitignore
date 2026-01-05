@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Build output (Electron builds)
+dist/
+
+# Lock files (optional)
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Electron specific
+main.js

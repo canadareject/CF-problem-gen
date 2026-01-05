@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Codeforces Problem Generator - Fetch competitive programming problems by rating and tags">
+    <title>Codeforces Problem Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="background-effects">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <h1>CF Problem Gen</h1>
+            </div>
+            <p class="tagline">Discover competitive programming challenges tailored to your skill level</p>
+        </header>
+
+        <main class="main-content">
+            <section class="control-panel glass-panel">
+                <h2 class="section-title">
+                    <span class="icon">⚙️</span>
+                    Configure Your Search
+                </h2>
+
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label for="rating">Problem Rating</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="rating" min="800" max="3500" step="100" value="1200"
+                                placeholder="800-3500">
+                            <span class="input-hint">Range: 800 - 3500</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="quantity">Number of Problems</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="quantity" min="1" max="50" value="10" placeholder="1-50">
+                            <span class="input-hint">Max: 50 problems</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group full-width">
+                        <label for="tags">Problem Tags (Optional)</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="tags" placeholder="e.g., dp, math, greedy">
+                            <span class="input-hint">Separate multiple tags with commas</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group full-width">
+                        <label for="excludeTags">Exclude Tags</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="excludeTags" value="*special, interactive"
+                                placeholder="e.g., *special, interactive">
+                            <span class="input-hint">Exclude problems with these tags</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="popular-tags">
+                    <span class="tags-label">Popular tags:</span>
+                    <div class="tag-chips">
+                        <button class="tag-chip" data-tag="dp">dp</button>
+                        <button class="tag-chip" data-tag="math">math</button>
+                        <button class="tag-chip" data-tag="greedy">greedy</button>
+                        <button class="tag-chip" data-tag="implementation">implementation</button>
+                        <button class="tag-chip" data-tag="binary search">binary search</button>
+                        <button class="tag-chip" data-tag="graphs">graphs</button>
+                        <button class="tag-chip" data-tag="strings">strings</button>
+                        <button class="tag-chip" data-tag="trees">trees</button>
+                    </div>
+                </div>
+
+                <div class="options-row">
+                    <label class="toggle-option">
+                        <input type="checkbox" id="fetchStatementsToggle">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Fetch full problem statements (slower)</span>
+                    </label>
+                </div>
+
+                <button id="fetchBtn" class="fetch-button">
+                    <span class="btn-text">Generate Problems</span>
+                    <span class="btn-icon">→</span>
+                    <div class="btn-glow"></div>
+                </button>
+            </section>
+
+            <div class="results-layout">
+                <section class="results-section">
+                    <div class="results-header">
+                        <h2 class="section-title">
+                            <span class="icon">📋</span>
+                            Generated Problems
+                        </h2>
+                        <div id="resultsCount" class="results-count"></div>
+                    </div>
+
+                    <div id="loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <p id="loadingText">Fetching problems from Codeforces...</p>
+                    </div>
+
+                    <div id="error" class="error-message hidden"></div>
+
+                    <div id="problemsContainer" class="problems-grid"></div>
+                </section>
+
+                <aside id="problemIdsSidebar" class="problem-ids-sidebar hidden">
+                    <div class="sidebar-header">
+                        <h3>Problem IDs</h3>
+                        <button id="copyIdsBtn" class="copy-btn" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <textarea id="problemIdsList" class="ids-list" readonly></textarea>
+
+                    <div id="statementsSection" class="statements-section hidden">
+                        <div class="sidebar-header">
+                            <h3>Problem Statements</h3>
+                            <button id="copyStatementsBtn" class="copy-btn" title="Copy all statements">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Copy All</span>
+                            </button>
+                        </div>
+                        <textarea id="problemStatementsList" class="statements-list" readonly></textarea>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Powered by <a href="https://codeforces.com/apiHelp" target="_blank" rel="noopener">Codeforces API</a></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
